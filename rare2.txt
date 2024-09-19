@@ -2441,15 +2441,7 @@ end
 
 local cfn, v3, GetDescendants, typeof, tinsert, next, isa, clamp = CFrame.new, Vector3.new, game.GetDescendants, typeof, table.insert, next, game.IsA, math.clamp
 
-local function IsPointInVolume(point: Vector3, volumeCenter: CFrame, volumeSize: Vector3)
-	local volumeSpacePoint = volumeCenter:PointToObjectSpace(point)
-	return volumeSpacePoint.X >= -volumeSize.X/2
-		and volumeSpacePoint.X <= volumeSize.X/2
-		and volumeSpacePoint.Y >= -volumeSize.Y/2
-		and volumeSpacePoint.Y <= volumeSize.Y/2
-		and volumeSpacePoint.Z >= -volumeSize.Z/2
-		and volumeSpacePoint.Z <= volumeSize.Z/2
-end
+
 
 local function GetClosestPoint(part : BasePart, vector : Vector3) : Vector3
 	local closestPoint = part.CFrame:PointToObjectSpace(vector)
