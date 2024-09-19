@@ -2443,16 +2443,6 @@ local cfn, v3, GetDescendants, typeof, tinsert, next, isa, clamp = CFrame.new, V
 
 
 
-local function GetClosestPoint(part : BasePart, vector : Vector3) : Vector3
-	local closestPoint = part.CFrame:PointToObjectSpace(vector)
-	local size = part.Size / 2
-	closestPoint = v3(
-		clamp(closestPoint.x, -size.x, size.x),
-		clamp(closestPoint.y, -size.y, size.y),
-		clamp(closestPoint.z, -size.z, size.z)
-	)
-	return part.CFrame:PointToWorldSpace(closestPoint)
-end
 
 local function partsAt(Position, Range)
 	local Descendants = GetDescendants(workspace)
