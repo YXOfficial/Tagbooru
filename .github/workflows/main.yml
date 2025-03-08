@@ -1,5 +1,5 @@
-# This is a basic workflow to help you get started with Actions for Tagbooru
-name: CI/CD for Tagbooru
+# Workflow to run Docker Compose only
+name: Docker Compose CI
 
 # Controls when the workflow will run
 on:
@@ -14,8 +14,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build-and-deploy"
-  build-and-deploy:
+  # This workflow contains a single job called "docker-compose-run"
+  docker-compose-run:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -25,38 +25,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Set up the environment (e.g., Node.js, Ruby, or another runtime) based on your project
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18' # Adjust version as needed
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2' # Adjust version as needed
-          bundler-cache: true # Cache Ruby dependencies
+      # Set up Docker Buildx (optional, for building Docker images)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      # Install dependencies (adjust based on your project)
-      - name: Install dependencies
+      # Run Docker Compose to start the service
+      - name: Run Docker Compose
         run: |
-          npm install
-          bundle install
-
-      # Build the project (e.g., precompile assets or generate static files)
-      - name: Build static site
-        run: |
-          # Example: Precompile assets if using Rails
-          bundle exec rails assets:precompile
-          # Or, if using a static site generator, e.g., for Jekyll
-          # bundle exec jekyll build --destination public
-          # Move output to a folder GitHub Pages can serve
-          mkdir -p public
-          cp -r public/* . || true # Copy precompiled assets to root or adjust path
-
-      # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public # Directory to deploy (adjust if different)
-          publish_branch: gh-pages # Optional: Use gh-pages branch instead of master
+          docker-compose up -d --build
+          # Wait for the service to be ready (adjust timeout as needed)
+          sleep 30
